@@ -1,56 +1,30 @@
-from flask import Flask, request, jsonify, render_template, redirect
-from models import db, User, Referral, init_app
-from referral import generate_referral_code, increment_referrals_count
+from flask import Flask
+from extensions import db, migrate, cache
+from auth.routes import auth_bp
+from referral.routes import referral_bp
 
-app = Flask(__name__)
-init_app(app)
+def create_app():
+    app = Flask(__name__)
 
-with app.app_context():
-    db.create_all()
+    # Load configurations
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['CACHE_TYPE'] = 'SimpleCache'
 
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        password = request.form['password']
-        referral_code = request.form.get('referral_code', None)  # Get referral code from form
+    # Initialize extensions
+    db.init_app(app)
+    migrate.init_app(app, db)
+    cache.init_app(app)
 
-        # Check if the user already exists
-        if User.query.filter_by(email=email).first():
-            return "Email already registered", 400
+    # Register blueprints
+    app.register_blueprint(auth_bp, url_prefix='/auth')
+    app.register_blueprint(referral_bp, url_prefix='/referral')
 
-        # Generate a unique referral code for the new user
-        new_referral_code = generate_referral_code()
+    with app.app_context():
+        db.create_all()
 
-        # Handle referral logic
-        if referral_code:
-            referrer = User.query.filter_by(referral_code=referral_code).first()
-            if referrer:
-                # Increment referrer's referral count
-                increment_referrals_count(referrer.id)
-
-                # Add a record to the Referral table
-                referral = Referral(referrer_id=referrer.id, referred_email=email)
-                db.session.add(referral)
-
-        # Save the new user
-        user = User(name=name, email=email, password=password, referral_code=new_referral_code)
-        db.session.add(user)
-        db.session.commit()
-
-        return render_template('success.html', referral_code=new_referral_code)
-
-    # Auto-fill referral code if provided in query parameters
-    referral_code = request.args.get('ref', None)
-    return render_template('signup.html', referral_code=referral_code)
-
-
-@app.route('/leaderboard', methods=['GET'])
-def leaderboard():
-    users = User.query.order_by(User.referrals_count.desc()).all()
-    leaderboard_data = [{'name': user.name, 'referrals_count': user.referrals_count} for user in users]
-    return render_template('leaderboard.html', leaderboard=leaderboard_data)
+    return app
 
 if __name__ == "__main__":
+    app = create_app()
     app.run(debug=True)
