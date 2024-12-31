@@ -1,3 +1,4 @@
+
 ---
 
 # Referral System
@@ -11,6 +12,7 @@ A **Referral System** built using Flask and SQLite3, designed to allow users to:
 This project is structured for scalability and modularity, making it easy to extend and maintain.
 
 ---
+
 
 ## **Features**
 
