@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Successful</title>
+</head>
+<body>
+    <h1>Thank You for Signing Up!</h1>
+    <p>Your unique referral code is: <strong>{{ referral_code }}</strong></p>
+    <p>Share your referral link:</p>
+    <p><a href="/auth/signup?ref={{ referral_code }}">/auth/signup?ref={{ referral_code }}</a></p>
+</body>
+</html>

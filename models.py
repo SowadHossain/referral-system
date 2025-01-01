@@ -1,9 +1,9 @@
-from flask_sqlalchemy import SQLAlchemy
+from extensions import db
 from datetime import datetime
 
-db = SQLAlchemy()
-
 class User(db.Model):
+    __tablename__ = 'users'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
@@ -12,13 +12,13 @@ class User(db.Model):
     referrals_count = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    # Relationship with Referral table
+    referrals = db.relationship('Referral', backref='referrer', lazy=True)
+
 class Referral(db.Model):
+    __tablename__ = 'referrals'
+
     id = db.Column(db.Integer, primary_key=True)
-    referrer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    referrer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     referred_email = db.Column(db.String(100), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-def init_app(app):
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    db.init_app(app)
