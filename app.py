@@ -2,6 +2,7 @@ from flask import Flask
 from extensions import db, migrate, cache
 from auth.routes import auth_bp
 from referral.routes import referral_bp
+from base.routes import base_bp  # Import base routes
 
 def create_app():
     app = Flask(__name__)
@@ -17,17 +18,16 @@ def create_app():
     cache.init_app(app)
 
     # Register blueprints
-    app.register_blueprint(auth_bp, url_prefix='/auth')
-    app.register_blueprint(referral_bp, url_prefix='/referral')
+    app.register_blueprint(base_bp)  # Base routes
+    app.register_blueprint(auth_bp, url_prefix='/auth')  # Auth routes
+    app.register_blueprint(referral_bp, url_prefix='/referral')  # Referral routes
 
     with app.app_context():
         db.create_all()
 
     return app
-    
+
 
 if __name__ == "__main__":
     app = create_app()
     app.run(debug=True)
-
-
