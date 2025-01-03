@@ -4,6 +4,7 @@ import JoinWaitlist from "../sections/JoinWaitlist";
 import ReferralCodes from "../sections/ReferralCodes";
 import LeaderboardSection from "../sections/LeaderboardSection";
 import Footer from "../components/footer";
+import LeaderBoard from "../sections/LeaderBoard";
 
 const LandingPage = () => {
     return (
@@ -17,6 +18,8 @@ const LandingPage = () => {
             {/* Referral Codes Section */}
             <ReferralCodes />
             <LeaderboardSection />
+
+            <LeaderBoard/>
             <Footer/>
         </div>
     );
