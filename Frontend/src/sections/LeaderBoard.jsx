@@ -27,7 +27,7 @@ const LeaderBoard = () => {
   }
 
   return (
-    <div className="bg-gradient-to-b from-pink-100 to-pink-200 p-8 rounded-2xl shadow-lg w-full max-w-4xl mx-auto">
+    <div className="bg-gradient-to-b from-white-100 to-white-200 p-8 rounded-2xl shadow-lg w-full max-w-4xl mx-auto">
       {/* Title */}
       <h1 className="text-2xl font-bold text-center text-black mb-6">
         See Who's Referring the Most
