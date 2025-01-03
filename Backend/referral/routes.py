@@ -30,10 +30,21 @@ def process_referral():
 
     return jsonify({'message': 'Referral processed successfully'})
 
+
 @referral_bp.route('/leaderboard', methods=['GET'])
-@cache.cached(timeout=60, key_prefix='leaderboard')
-def leaderboard():
-    """Displays the leaderboard of users sorted by referral count."""
-    users = User.query.order_by(User.referrals_count.desc()).all()
-    leaderboard_data = [{'name': user.name, 'referrals_count': user.referrals_count} for user in users]
-    return render_template('leaderboard.html', leaderboard=leaderboard_data)
+def get_leaderboard():
+    """Fetches and returns the leaderboard data as JSON."""
+    # Fetch top 7 users by referrals_count in descending order
+    users = User.query.order_by(User.referrals_count.desc()).limit(7).all()
+
+    # Format the leaderboard data
+    leaderboard = [
+        {
+            "rank": index + 1,
+            "name": user.name,
+            "profilePicture": user.profile_picture,
+            "score": user.referrals_count
+        }
+        for index, user in enumerate(users)
+    ]
+    return jsonify(leaderboard)
