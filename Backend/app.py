@@ -3,10 +3,13 @@ from extensions import db, migrate, cache
 from auth.routes import auth_bp
 from referral.routes import referral_bp
 from base.routes import base_bp  # Import base routes
+from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__)
 
+    CORS(app)
+    
     # Load configurations
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
