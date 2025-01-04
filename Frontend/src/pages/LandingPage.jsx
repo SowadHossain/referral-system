@@ -3,7 +3,6 @@ import Hero from "../sections/Hero";
 import JoinWaitlist from "../sections/JoinWaitlist";
 import ReferralCodes from "../sections/ReferralCodes";
 import LeaderboardSection from "../sections/LeaderboardSection";
-import Footer from "../components/footer";
 import LeaderBoard from "../sections/LeaderBoard";
 
 const LandingPage = () => {
@@ -20,7 +19,6 @@ const LandingPage = () => {
             <LeaderboardSection />
 
             <LeaderBoard/>
-            <Footer/>
         </div>
     );
 };
