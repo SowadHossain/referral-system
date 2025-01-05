@@ -1,75 +1,60 @@
-from flask import Blueprint, request, jsonify, render_template
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask import Blueprint, request, jsonify
+from werkzeug.security import generate_password_hash
 from extensions import db
-from models import User,Referral
+from models import User
+from referral.routes import process_referral  # Import referral route logic
 from referral.utils import generate_referral_code
 
 auth_bp = Blueprint('auth', __name__)
 
-@auth_bp.route('/signup', methods=['GET', 'POST'])
+@auth_bp.route('/signup', methods=['POST'])
 def signup():
-    if request.method == 'POST':
-        # Get form data
-        name = request.form.get('name')
-        email = request.form.get('email')
-        password = request.form.get('password')
-        referral_code = request.form.get('referral_code', None)  # Optional
+    """Signup route that optionally processes referral codes."""
+    # Parse JSON data from the request
+    data = request.get_json()
 
-        # Validate input
-        if not name or not email or not password:
-            return jsonify({'error': 'All fields are required'}), 400
+    # Extract fields
+    name = data.get('name')
+    email = data.get('email')
+    password = data.get('password', None)  # Password is optional
+    referral_code = data.get('referral_code', None)  # Optional referral code
 
-        # Check if the user already exists
-        if User.query.filter_by(email=email).first():
-            return jsonify({'error': 'Email already registered'}), 400
+    # Validate required fields
+    if not name or not email:
+        return jsonify({'error': 'Name and email are required'}), 400
 
-        # Hash the password
-        hashed_password = generate_password_hash(password)
+    # Check if the email is already registered
+    if User.query.filter_by(email=email).first():
+        return jsonify({'error': 'Email is already registered'}), 400
 
-        # Generate a unique referral code
-        new_referral_code = generate_referral_code()
+    # Hash the password if provided; otherwise, set a placeholder
+    hashed_password = generate_password_hash(password) if password else generate_password_hash('default_password')
 
-        # Handle referral logic
-        if referral_code:
-            referrer = User.query.filter_by(referral_code=referral_code).first()
-            if referrer:
-                # Add a referral record
-                referral = Referral(referrer_id=referrer.id, referred_email=email)
-                db.session.add(referral)
+    # Generate a unique referral code for the new user
+    new_referral_code = generate_referral_code()
 
-                # Increment referrer's referral count
-                referrer.referrals_count += 1
+    # Process referral if referral_code is provided
+    if referral_code:
+        # Call the process_referral function directly
+        referral_response, referral_status = process_referral({
+            'email': email,
+            'referrer_code': referral_code
+        })
+        if referral_status != 200:
+            return referral_response, referral_status  # Return error if referral processing fails
 
-        # Save the new user
-        user = User(
-            name=name,
-            email=email,
-            password=hashed_password,
-            referral_code=new_referral_code
-        )
-        db.session.add(user)
-        db.session.commit()
+    # Create the new user
+    user = User(
+        name=name,
+        email=email,
+        password=hashed_password,
+        referral_code=new_referral_code
+    )
+    db.session.add(user)
+    db.session.commit()
 
-        return render_template('signup_success.html', referral_code=new_referral_code)
+    return jsonify({
+        'message': 'Signup successful!',
+        'referral_code': new_referral_code
+    }), 201
 
-    # Handle GET request for rendering the signup form
-    referral_code = request.args.get('ref', None)  # Auto-fill referral code if provided in query string
-    return render_template('signup.html', referral_code=referral_code)
-
-@auth_bp.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        # Get login credentials
-        email = request.form.get('email')
-        password = request.form.get('password')
-
-        # Validate credentials
-        user = User.query.filter_by(email=email).first()
-        if not user or not check_password_hash(user.password, password):
-            return render_template('login.html', error="Invalid email or password"), 401
-
-        # Successful login
-        return render_template('dashboard.html', user=user)
-
-    # Render the login form for GET requests
-    return render_template('login.html')

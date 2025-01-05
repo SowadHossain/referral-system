@@ -6,10 +6,16 @@ from referral.utils import increment_referrals_count
 referral_bp = Blueprint('referral', __name__)
 
 @referral_bp.route('/process_referral', methods=['POST'])
-def process_referral():
-    """Handles new user signup through a referral link."""
-    referred_email = request.form.get('email')
-    referrer_code = request.form.get('referrer_code')
+def process_referral_route():
+    """Route wrapper for process_referral."""
+    data = request.get_json()
+    return process_referral(data)
+
+
+def process_referral(data):
+    """Handles referral logic for a new user signup."""
+    referred_email = data.get('email')
+    referrer_code = data.get('referrer_code')
 
     # Validate input
     if not referred_email or not referrer_code:
@@ -20,15 +26,22 @@ def process_referral():
     if not referrer:
         return jsonify({'error': 'Invalid referrer code'}), 404
 
+    # Check if the email is already referred
+    existing_referral = Referral.query.filter_by(referred_email=referred_email).first()
+    if existing_referral:
+        return jsonify({'error': 'This email has already been referred'}), 400
+
     # Add a referral record
     referral = Referral(referrer_id=referrer.id, referred_email=referred_email)
     db.session.add(referral)
-    db.session.commit()
 
     # Increment the referrer’s referral count
-    increment_referrals_count(referrer.id)
+    referrer.referrals_count += 1
+    db.session.add(referrer)
+    db.session.commit()
 
-    return jsonify({'message': 'Referral processed successfully'})
+    return jsonify({'message': 'Referral processed successfully'}), 200
+
 
 
 @referral_bp.route('/leaderboard', methods=['GET'])

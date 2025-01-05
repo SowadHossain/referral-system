@@ -1,5 +1,6 @@
 import React from "react";
 import Ranks from "../components/Ranks"
+import { useState,useEffect } from "react";
 
 const LeaderBoard = () => {
   const [data, setData] = useState([]); // State to hold leaderboard data
