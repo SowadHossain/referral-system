@@ -1,6 +1,6 @@
 import React from "react";
 import Ranks from "../components/Ranks"
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const LeaderBoard = () => {
   const [data, setData] = useState([]); // State to hold leaderboard data
@@ -28,7 +28,9 @@ const LeaderBoard = () => {
   }
 
   return (
-    <div className="bg-gradient-to-b from-white-100 to-white-200 p-8 rounded-2xl shadow-lg w-full max-w-4xl mx-auto">
+    <>    <div
+      id="LeaderBoard"
+      className="bg-gradient-to-b from-white-100 to-white-200 p-8 rounded-2xl shadow-lg w-full max-w-4xl mx-auto">
       {/* Title */}
       <h1 className="text-2xl font-bold text-center text-black mb-6">
         See Who's Referring the Most
@@ -47,6 +49,11 @@ const LeaderBoard = () => {
         ))}
       </div>
     </div>
+    <div className="h-8 w-auto">
+
+      </div>
+    </>
+
   );
 };
 
