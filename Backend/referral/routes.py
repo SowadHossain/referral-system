@@ -19,12 +19,12 @@ def process_referral(data):
 
     # Validate input
     if not referred_email or not referrer_code:
-        return jsonify({'error': 'Email and referrer code are required'}), 400
+        return jsonify({'error': 'Email and referral code are required'}), 400
 
     # Find the referrer
     referrer = User.query.filter_by(referral_code=referrer_code).first()
     if not referrer:
-        return jsonify({'error': 'Invalid referrer code'}), 404
+        return jsonify({'error': 'Invalid referral code'}), 404
 
     # Check if the email is already referred
     existing_referral = Referral.query.filter_by(referred_email=referred_email).first()

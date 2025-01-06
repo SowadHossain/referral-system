@@ -4,6 +4,7 @@ from extensions import db
 from models import User
 from referral.routes import process_referral  # Import referral route logic
 from referral.utils import generate_referral_code
+from email_sender import send_email
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -50,8 +51,12 @@ def signup():
         password=hashed_password,
         referral_code=new_referral_code
     )
+    
     db.session.add(user)
     db.session.commit()
+    
+    #sent email to user
+    send_email(email, name, new_referral_code)
 
     return jsonify({
         'message': 'Signup successful!',
