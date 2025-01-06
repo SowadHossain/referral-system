@@ -75,7 +75,7 @@ const Navbar = ({ leaderboardRef }) => {
                 <div className="lg:hidden bg-white px-4 sm:px-6 md:px-8 lg:px-32 shadow-md">
                     <div className="flex flex-col space-y-4 py-4">
                         <button
-                            onClick={() => navigate("/")}
+                            onClick={scrollToLeaderboard}
                             className="text-[#67358E] border-2 border-[#67358E] rounded-full hover:bg-[#67358E] hover:text-white transition duration-200 px-6 py-2">
                             Leaderboard
                         </button>
