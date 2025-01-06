@@ -1,8 +1,17 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import heroImage from "../assets/hero-image.png"; // Desktop image
 import mobileImage from "../assets/mobile-image.png"; // Mobile image
 
-const Hero = () => {
+const Hero = ({ DetailsRef }) => {
+    const navigate = useNavigate();
+
+    const handleScrollToDetails = () => {
+        if (DetailsRef.current) {
+          DetailsRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    };
+
     return (
         <>
             {/* Hero Section for Desktop and Tablet */}
@@ -21,10 +30,14 @@ const Hero = () => {
                     </p>
                     {/* Buttons */}
                     <div className="flex space-x-4 md:space-x-6">
-                        <button className="bg-[#67358E] text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-semibold text-base md:text-lg hover:bg-[#542C71] transition duration-200">
+                        <button
+                            onClick={() => navigate("/signup")}
+                            className="bg-[#67358E] text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-semibold text-base md:text-lg hover:bg-[#542C71] transition duration-200">
                             Join Waitlist
                         </button>
-                        <button className="bg-white border-2 border-[#67358E] text-[#67358E] px-6 md:px-8 py-3 md:py-4 rounded-full font-semibold text-base md:text-lg hover:bg-[#67358E] hover:text-white transition duration-200">
+                        <button
+                            onClick={handleScrollToDetails}
+                            className="bg-white border-2 border-[#67358E] text-[#67358E] px-6 md:px-8 py-3 md:py-4 rounded-full font-semibold text-base md:text-lg hover:bg-[#67358E] hover:text-white transition duration-200">
                             Learn More
                         </button>
                     </div>
@@ -58,10 +71,14 @@ const Hero = () => {
 
                 {/* Buttons */}
                 <div className="flex flex-col space-y-4 w-full max-w-sm">
-                    <button className="bg-green-600 text-white py-3 rounded-full font-semibold text-lg hover:bg-green-700 transition duration-200">
+                    <button
+                        onClick={() => navigate("/signup")}
+                        className="bg-green-600 text-white py-3 rounded-full font-semibold text-lg hover:bg-green-700 transition duration-200">
                         Join the Waitlist
                     </button>
-                    <button className="bg-white border-2 border-purple-600 text-purple-600 py-3 rounded-full font-semibold text-lg hover:bg-purple-600 hover:text-white transition duration-200">
+                    <button
+                        onClick={handleScrollToDetails}
+                        className="bg-white border-2 border-purple-600 text-purple-600 py-3 rounded-full font-semibold text-lg hover:bg-purple-600 hover:text-white transition duration-200">
                         Learn More
                     </button>
                 </div>

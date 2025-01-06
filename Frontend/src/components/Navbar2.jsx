@@ -22,8 +22,8 @@ const Navbar = ({ leaderboardRef }) => {
             <div className="px-4 sm:px-6 md:px-8 lg:px-32 flex justify-between items-center p-6">
                 {/* Logo Section */}
                 <div
-                onClick={() => navigate("/")}
-                className="flex items-center space-x-2">
+                    onClick={() => navigate("/")}
+                    className="flex items-center space-x-2">
                     <img src={logo} alt="Chi.ke Logo" className="h-8" />
                 </div>
 
@@ -52,7 +52,7 @@ const Navbar = ({ leaderboardRef }) => {
                     {/* Leaderboard Button */}
                     <button
                         //onClick={() => navigate("/")} // <-- Navigate to /leaderboard
-                        onClick={scrollToLeaderboard}
+                        onClick={() => navigate("/")}
                         className="text-[#67358E] border-2 border-[#67358E] rounded-full hover:bg-[#67358E] hover:text-white transition duration-200"
                         style={{ width: "127px", height: "37px" }}
                     >
@@ -61,11 +61,11 @@ const Navbar = ({ leaderboardRef }) => {
 
                     {/* Join Waitlist Button */}
                     <button
-                        onClick={() => navigate("/signup")}
+                        onClick={() => navigate("/")}
                         className="bg-[#67358E] text-white rounded-full hover:bg-[#542C71] transition duration-200"
                         style={{ width: "121px", height: "40px" }}
                     >
-                        Join Waitlist
+                        Home
                     </button>
                 </div>
             </div>
@@ -80,9 +80,9 @@ const Navbar = ({ leaderboardRef }) => {
                             Leaderboard
                         </button>
                         <button
-                            onClick={() => navigate("/signup")}
+                            onClick={() => navigate("/")}
                             className="bg-[#67358E] text-white rounded-full hover:bg-[#542C71] transition duration-200 px-6 py-2">
-                            Join Waitlist
+                            Home
                         </button>
                     </div>
                 </div>
