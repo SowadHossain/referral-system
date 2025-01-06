@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom"; // <-- Added useNavigate here
 import signupImage from "../assets/signup-person-image.png"; // Replace with your image path
 
 const SignupForm = () => {
   const location = useLocation();
+  const navigate = useNavigate(); // <-- Added navigate function here
 
   // Form state
   const [formData, setFormData] = useState({
@@ -47,7 +48,7 @@ const SignupForm = () => {
           name: `${formData.firstName} ${formData.lastName}`,
           email: formData.email,
           password: formData.password,
-          referral_code: formData.referralCode, // Send referral code if available
+          referral_code: formData.referralCode,
         }),
       });
 
@@ -61,7 +62,10 @@ const SignupForm = () => {
           email: "",
           password: "",
           referralCode: "",
-        }); // Reset form on success
+        });
+
+        // <-- Redirect to /welcome after successful signup
+        navigate("/welcome"); 
       } else {
         setMessage(result.error || "An error occurred. Please try again.");
       }
@@ -111,7 +115,7 @@ const SignupForm = () => {
             className="mb-4 p-3 text-lg rounded border border-gray-300"
             required
           />
-  
+
           {formData.referralCode && (
             <p className="text-sm text-gray-600 mb-4">
               Referral Code: <span className="font-bold">{formData.referralCode}</span>
@@ -124,7 +128,8 @@ const SignupForm = () => {
             Signup
           </button>
         </form>
-        {/* Display success or error message
+
+        {/* Display success or error message */}
         {message && (
           <p
             className={`mt-4 text-center text-lg ${
@@ -133,7 +138,7 @@ const SignupForm = () => {
           >
             {message}
           </p>
-        )} */}
+        )}
       </div>
 
       {/* Right side image */}

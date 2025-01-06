@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg"; // Import the logo image
+
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const navigate = useNavigate();
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -40,6 +43,7 @@ const Navbar = () => {
                 <div className="hidden lg:flex items-center space-x-6">
                     {/* Leaderboard Button */}
                     <button
+                        onClick={() => navigate("/")} // <-- Navigate to /leaderboard
                         className="text-[#67358E] border-2 border-[#67358E] rounded-full hover:bg-[#67358E] hover:text-white transition duration-200"
                         style={{ width: "127px", height: "37px" }}
                     >
@@ -48,6 +52,7 @@ const Navbar = () => {
 
                     {/* Join Waitlist Button */}
                     <button
+                        onClick={() => navigate("/signup")}
                         className="bg-[#67358E] text-white rounded-full hover:bg-[#542C71] transition duration-200"
                         style={{ width: "121px", height: "40px" }}
                     >
@@ -60,10 +65,14 @@ const Navbar = () => {
             {menuOpen && (
                 <div className="lg:hidden bg-white px-4 sm:px-6 md:px-8 lg:px-32 shadow-md">
                     <div className="flex flex-col space-y-4 py-4">
-                        <button className="text-[#67358E] border-2 border-[#67358E] rounded-full hover:bg-[#67358E] hover:text-white transition duration-200 px-6 py-2">
+                        <button
+                            onClick={() => navigate("/")}
+                            className="text-[#67358E] border-2 border-[#67358E] rounded-full hover:bg-[#67358E] hover:text-white transition duration-200 px-6 py-2">
                             Leaderboard
                         </button>
-                        <button className="bg-[#67358E] text-white rounded-full hover:bg-[#542C71] transition duration-200 px-6 py-2">
+                        <button
+                            onClick={() => navigate("/signup")}
+                            className="bg-[#67358E] text-white rounded-full hover:bg-[#542C71] transition duration-200 px-6 py-2">
                             Join Waitlist
                         </button>
                     </div>
