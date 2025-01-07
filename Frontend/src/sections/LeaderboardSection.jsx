@@ -10,13 +10,11 @@ const LeaderboardSection = () => {
             <div className="bg-white rounded-lg p-10 lg:shadow-[0_10px_15px_rgba(0,0,0,0.1)]">
                 <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between">
                     {/* Left Side: Title and Text */}
-                    <div className="w-full lg:w-1/2 pr-8">
-                        <h2 className="hidden lg:block text-5xl font-bold leading-snug">
-                            Climb the <br />
-                            <span className="text-green-500">Leaderboard</span>
-                        </h2>
-                        <h2 className="block lg:hidden text-3xl font-bold text-black whitespace-nowrap">
-                            Climb the Leaderboard
+                    <div className="w-full lg:w-1/2 pr-8 text-center">
+                        <h2 className="text-3xl lg:text-5xl font-bold leading-snug">
+                            Climb the
+                            <br className="hidden lg:block" />
+                            <span className="text-green-500"> Leaderboard</span>
                         </h2>
                         <div className="mt-6"></div>
                     </div>

@@ -10,7 +10,7 @@ const LeaderBoard = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:5000/referral/leaderboard");
+        const response = await fetch("http://backend-python.biggpanada.site/referral/leaderboard");
         const result = await response.json();
         setData(result); // Update state with fetched data
         setLoading(false); // Set loading to false

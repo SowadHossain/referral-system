@@ -4,6 +4,7 @@ import Footer from "./components/Footer";
 import LandingPage from "./pages/LandingPage"; // Landing page with Hero section //import Leaderboard from "./pages/Leaderboard";
 import SignupPage from "./pages/SignupPage"
 import WelcomeAboard from "./pages/WelcomeAbroad";
+
 const App = () => {
     return (
         <Router>
