@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom"; // <-- Added useNavigate here
-import signupImage from "../assets/signup-person-image.png"; // Replace with your image path
+import { useLocation, useNavigate } from "react-router-dom"; 
+import signupImage from "../assets/signup-person-image.png";
 
 const SignupForm = () => {
   const location = useLocation();
-  const navigate = useNavigate(); // <-- Added navigate function here
+  const navigate = useNavigate(); 
 
   // Form state
   const [formData, setFormData] = useState({
@@ -14,6 +14,9 @@ const SignupForm = () => {
     password: "",
     referralCode: "",
   });
+
+  // Loading state
+  const [isLoading, setIsLoading] = useState(false);
 
   // Message state for success or error messages
   const [message, setMessage] = useState("");
@@ -36,7 +39,8 @@ const SignupForm = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage(""); // Clear previous messages
+    setMessage(""); 
+    setIsLoading(true); // Start loading
 
     try {
       const response = await fetch("http://127.0.0.1:5000/auth/signup", {
@@ -64,7 +68,7 @@ const SignupForm = () => {
           referralCode: "",
         });
 
-        // <-- Redirect to /welcome after successful signup
+        // Redirect to /welcome after successful signup
         navigate("/welcome"); 
       } else {
         setMessage(result.error || "An error occurred. Please try again.");
@@ -72,6 +76,8 @@ const SignupForm = () => {
     } catch (error) {
       console.error("Error:", error);
       setMessage("An error occurred. Please check your network connection.");
+    } finally {
+      setIsLoading(false); // End loading regardless of success or error
     }
   };
 
@@ -121,11 +127,18 @@ const SignupForm = () => {
               Referral Code: <span className="font-bold">{formData.referralCode}</span>
             </p>
           )}
+
+          {/* Submit button */}
           <button
             type="submit"
-            className="p-3 text-lg bg-green-600 text-white rounded hover:bg-green-700"
+            className={`p-3 text-lg rounded text-white ${
+              isLoading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-700"
+            }`}
+            disabled={isLoading}
           >
-            Signup
+            {isLoading ? "Loading..." : "Signup"}
           </button>
         </form>
 

@@ -69,9 +69,3 @@ The Playchike.com Team
         print(f"Failed to send email to {receiver_email}. Error: {e}")
 
 
-# # Test the function
-# if __name__ == "__main__":
-#     receiver_email = "johnwick10242048@gmail.com"
-#     first_name = "John"
-#     referral_code = "REF123456"
-#     send_email(receiver_email, first_name, referral_code)

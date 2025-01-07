@@ -35,7 +35,7 @@ def signup():
     new_referral_code = generate_referral_code()
 
     # Process referral if referral_code is provided
-    if referral_code:
+    if referral_code:   
         # Call the process_referral function directly
         referral_response, referral_status = process_referral({
             'email': email,
